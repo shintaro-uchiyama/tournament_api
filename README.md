@@ -13,9 +13,14 @@ gradleでビルド（テストパスキップ）してwarファイルパッケ�
 cd tournament
 gradle -Dskip.tests build war && cp build/libs/tournament-0.0.1-SNAPSHOT.war ../docker/tomcat01/deployment/tournament.war
 ```
-## ブラウザから確認
+## ブラウザから疎通確認
 以下URLをブラウザに打ち込んで内容確認  
 ※ローカル環境のhostsファイルに「127.0.0.1 tournament.local」を追記
 ```
-http://tournament.local/tournament/
+http://tournament.local/
+```
+## GraphiqlによるGraphql確認
+以下URLにアクセスして再生ボタン風の物を押すと/graphqlにPOST通信が飛び実行される
+```
+http://tournament.local/graphiql
 ```
