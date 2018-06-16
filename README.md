@@ -20,7 +20,14 @@ gradle -Dskip.tests build war && cp build/libs/tournament-0.0.1-SNAPSHOT.war ../
 http://tournament.local/
 ```
 ## GraphiqlによるGraphql確認
-以下URLにアクセスして再生ボタン風の物を押すと/graphqlにPOST通信が飛び実行される
+以下URLにアクセスしてqueryに記載された内容を追記&再生ボタン風の物を押すと/graphqlにPOST通信が飛び実行される  
+[githubのsample](https://github.com/graphql-java/graphql-spring-boot/blob/master/example/src/main/java/com/embedler/moon/graphql/boot/sample/ApplicationBootConfiguratisampleon.java) を真似したので記載された「responseee」が返却される
 ```
 http://tournament.local/graphiql
+```
+query
+```
+query{
+ test 
+ }
 ```

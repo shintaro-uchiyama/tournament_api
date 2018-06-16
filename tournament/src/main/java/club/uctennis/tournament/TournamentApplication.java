@@ -31,7 +31,7 @@ public class TournamentApplication {
                 .field(field -> field
                     .name("test")
                     .type(Scalars.GraphQLString)
-                    .dataFetcher(environment -> "response")
+                    .dataFetcher(environment -> "responseee")
                 )
                 .build())
             .build();

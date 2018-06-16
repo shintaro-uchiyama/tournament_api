@@ -2,3 +2,4 @@
 RemoteSystemsTempFiles/
 docker/tomcat01/deployment/tournament/
 docker/tomcat01/deployment/tournament.war
+/.recommenders/
