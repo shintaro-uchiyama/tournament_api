@@ -24,3 +24,29 @@ services:
       - "8000:8000"
     volumes:
       - ./docker/tomcat01/deployment:/usr/local/tomcat/webapps/:rw
+  db01:
+    container_name: mysql01
+    build: ./docker/mysql01
+    image: mysql01:1.0.0
+    command: >-
+      /entrypoint.sh mysqld
+        --slow_query_log=3
+        --long_query_time=3
+        --slow_query_log_file=/var/log/mysql/slow.log
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tournament
+      TZ: "Asia/Tokyo"
+    ports:
+      - "3306:3306"
+    volumes:
+      - data:/var/lib/mysql
+  mail01:
+    container_name: mailcatcher01
+    build: ./docker/mailcatcher01
+    image: mailcatcher01:1.0.0
+    ports:
+        - 1025:1025
+        - 1080:1080
+volumes:
+  data: {}
