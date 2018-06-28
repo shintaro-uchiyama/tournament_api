@@ -22,18 +22,4 @@ public class TournamentApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TournamentApplication.class, args);
 	}
-
-    @Bean
-    GraphQLSchema schema() {
-        return GraphQLSchema.newSchema()
-            .query(GraphQLObjectType.newObject()
-                .name("query")
-                .field(field -> field
-                    .name("test")
-                    .type(Scalars.GraphQLString)
-                    .dataFetcher(environment -> "responseee")
-                )
-                .build())
-            .build();
-    }
 }

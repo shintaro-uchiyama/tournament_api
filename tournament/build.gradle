@@ -40,4 +40,7 @@ dependencies {
 
 	// to embed Voyager tool
 	compile 'com.graphql-java:voyager-spring-boot-starter:4.2.0'
+
+	// to GraphQL Java Tools
+	compile 'com.graphql-java:graphql-java-tools:5.1.0'
 }

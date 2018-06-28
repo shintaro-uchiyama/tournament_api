@@ -27,7 +27,20 @@ http://tournament.local/graphiql
 ```
 query
 ```
-query{
- test 
- }
+{
+  tournaments {
+    id
+    title
+  }
+}
+```
+
+## PostmanによるGraphql確認
+あんまりちゃんと見てないけど、以下のようなjsonをPOSTリクエストするとちゃんと帰ってきた
+```
+{
+  "query": "query{test}",
+  "operationName": "",
+  "variables": {}
+}
 ```
