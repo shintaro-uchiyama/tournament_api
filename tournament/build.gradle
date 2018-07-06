@@ -10,6 +10,15 @@ buildscript {
 	}
 }
 
+plugins {
+    id "com.arenagod.gradle.MybatisGenerator" version "1.4"
+}
+
+mybatisGenerator {
+    verbose = true
+    configFile = "src/main/resources/autogen/generatorConfig.xml"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'org.springframework.boot'
