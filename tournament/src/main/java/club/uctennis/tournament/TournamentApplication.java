@@ -16,7 +16,7 @@ public class TournamentApplication {
         return "Hello Spring Boot!";
     }
 
-	public static void main(String[] args) {
-		SpringApplication.run(TournamentApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TournamentApplication.class, args);
+    }
 }
