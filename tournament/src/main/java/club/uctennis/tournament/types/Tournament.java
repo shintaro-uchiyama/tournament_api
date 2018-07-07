@@ -6,9 +6,8 @@ import lombok.Data;
 public class Tournament {
 	private String id;
 	private String title;
-
-	public Tournament(String id, String title) {
-		this.id = id;
-		this.title = title;
-	}
+    private String subtitle;
+    private String date;
+    private String image;
+    private String description;
 }

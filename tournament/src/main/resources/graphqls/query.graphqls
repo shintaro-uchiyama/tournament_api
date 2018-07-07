@@ -6,4 +6,8 @@ type Query {
 type Tournament{
     id: String!
     title: String!
+    subtitle: String!
+    date: String!
+    image: String!
+    description: String!
 }

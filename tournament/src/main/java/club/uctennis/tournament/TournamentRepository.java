@@ -16,22 +16,31 @@ public class TournamentRepository {
 	@Autowired
 	private TournamentsMapper tournamentsMapper;
 
-	private List<Tournament> tournaments;
-
-	public TournamentRepository() {
-		Tournament tournament1 = new Tournament("1", "title2");
-
-		List<Tournament> tournaments = new ArrayList<>();
-		tournaments.add(tournament1);
-		this.tournaments = tournaments;
-	}
-
 	public List<Tournament> getTournaments(){
-		Tournaments tournaments2 = tournamentsMapper.selectByPrimaryKey(2);
-		Tournament tournament2 = new Tournament("2", tournaments2.getTitle());
-		this.tournaments.add(tournament2);
+		List<Tournament> tournaments = new ArrayList<>();
 
-		return this.tournaments;
+		Tournament tournament1 = new Tournament();
+		Tournaments tournaments1 = tournamentsMapper.selectByPrimaryKey(1);
+		tournament1.setId(tournaments1.getId().toString());
+		tournament1.setTitle(tournaments1.getTitle());
+		tournament1.setSubtitle(tournaments1.getSubtitle());
+		tournament1.setDate(tournaments1.getDate().toString());
+		tournament1.setImage(tournaments1.getImage());
+		tournament1.setDescription(tournaments1.getDescription());
+
+		tournaments.add(tournament1);
+
+		Tournaments tournaments2 = tournamentsMapper.selectByPrimaryKey(2);
+		Tournament tournament2 = new Tournament();
+		tournament2.setId(tournaments2.getId().toString());
+		tournament2.setTitle(tournaments2.getTitle());
+		tournament2.setSubtitle(tournaments1.getSubtitle());
+		tournament2.setDate(tournaments1.getDate().toString());
+		tournament2.setImage(tournaments1.getImage());
+		tournament2.setDescription(tournaments1.getDescription());
+		tournaments.add(tournament2);
+
+		return tournaments;
 	}
 
 }
