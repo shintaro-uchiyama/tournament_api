@@ -1,5 +1,8 @@
 package club.uctennis.tournament.types;
 
+import lombok.Data;
+
+@Data
 public class Tournament {
 	private String id;
 	private String title;
@@ -8,30 +11,4 @@ public class Tournament {
 		this.id = id;
 		this.title = title;
 	}
-	/**
-	 * @return id
-	 */
-	public String getId() {
-		return id;
-	}
-	/**
-	 * @param id セットする id
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
-	/**
-	 * @return title
-	 */
-	public String getTitle() {
-		return title;
-	}
-	/**
-	 * @param title セットする title
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-
 }

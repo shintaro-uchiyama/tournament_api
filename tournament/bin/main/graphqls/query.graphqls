@@ -1,9 +1,0 @@
-type Query {
-    # Find all tournaments
-    tournaments: [Tournament]!
-}
-
-type Tournament{
-    id: String!
-    title: String!
-}
