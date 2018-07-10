@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import club.uctennis.tournament.domain.mapper.ext.ExtTournamentsMapper;
 import club.uctennis.tournament.domain.model.Tournaments;
 import club.uctennis.tournament.services.TournamentService;
@@ -11,10 +12,11 @@ import club.uctennis.tournament.types.Tournament;
 
 /**
  * トーナメント関連の操作はここに書く.
- * 
+ *
  * @author uchiyama-shintaro
  *
  */
+@Service
 public class TournamentServiceImpl implements TournamentService {
 
   @Autowired
@@ -30,7 +32,7 @@ public class TournamentServiceImpl implements TournamentService {
    */
   public List<Tournament> getTournaments() {
 
-    List<Tournaments> tournamentData = this.tournamentsMapper.selectAll();
+    List<Tournaments> tournamentData = tournamentsMapper.selectAll();
     List<Tournament> tournamentResponse =
         tournamentData.stream().map(tournament -> modelMapper.map(tournament, Tournament.class))
             .collect(Collectors.toList());

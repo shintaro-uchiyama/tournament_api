@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import club.uctennis.tournament.TournamentRepository;
+import club.uctennis.tournament.services.TournamentService;
 import club.uctennis.tournament.types.Tournament;
 
 /**
@@ -17,7 +17,7 @@ import club.uctennis.tournament.types.Tournament;
 public class Query implements GraphQLQueryResolver {
 
   @Autowired
-  private TournamentRepository tournamentRepository;
+  private TournamentService tournamentService;
 
   /**
    * トーナメント一覧情報取得
@@ -25,6 +25,6 @@ public class Query implements GraphQLQueryResolver {
    * @return
    */
   public List<Tournament> getTournaments() {
-    return tournamentRepository.getTournaments();
+    return tournamentService.getTournaments();
   }
 }

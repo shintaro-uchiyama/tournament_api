@@ -4,6 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="club.uctennis.tournament.domain.mapper.ext.ExtTournamentsMapper">
     <select id="selectAll" resultType="club.uctennis.tournament.domain.model.Tournaments">
-        SELECT * FROM tuornaments
+        SELECT * FROM tournaments
     </select>
 </mapper>
