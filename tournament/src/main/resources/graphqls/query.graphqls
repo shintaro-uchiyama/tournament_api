@@ -3,11 +3,31 @@ type Query {
     tournaments: [Tournament]!
 }
 
-type Tournament{
+type Tournament {
     id: String!
     title: String!
     subtitle: String!
     date: String!
     image: String!
     description: String!
+}
+
+type Mutation {
+  # PreEntry tournament
+  preEntryTournament(
+    teamName: String!
+    representiveName: String!
+    email: String!
+    phone: String!
+  ): PreEntry
+}
+
+type PreEntry {
+  id: String!
+  teamName: String!
+  representiveName: String!
+  email: String!
+  phone: String!
+  createDate: String!
+  updateDate: String!
 }

@@ -1,6 +1,6 @@
 package club.uctennis.tournament.domain.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class FlywaySchemaHistory {
     /**
@@ -73,7 +73,7 @@ public class FlywaySchemaHistory {
      *
      * @mbg.generated
      */
-    private Date installedOn;
+    private LocalDateTime installedOn;
 
     /**
      *
@@ -269,7 +269,7 @@ public class FlywaySchemaHistory {
      *
      * @mbg.generated
      */
-    public Date getInstalledOn() {
+    public LocalDateTime getInstalledOn() {
         return installedOn;
     }
 
@@ -281,7 +281,7 @@ public class FlywaySchemaHistory {
      *
      * @mbg.generated
      */
-    public void setInstalledOn(Date installedOn) {
+    public void setInstalledOn(LocalDateTime installedOn) {
         this.installedOn = installedOn;
     }
 

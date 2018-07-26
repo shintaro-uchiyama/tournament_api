@@ -1,6 +1,6 @@
 package club.uctennis.tournament.domain.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Tournaments {
     /**
@@ -37,7 +37,7 @@ public class Tournaments {
      *
      * @mbg.generated
      */
-    private Date date;
+    private LocalDateTime date;
 
     /**
      *
@@ -137,7 +137,7 @@ public class Tournaments {
      *
      * @mbg.generated
      */
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -149,7 +149,7 @@ public class Tournaments {
      *
      * @mbg.generated
      */
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

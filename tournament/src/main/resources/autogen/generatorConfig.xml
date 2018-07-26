@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
-<generatorConfiguration >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
     <context id="MySQLTables" targetRuntime="MyBatis3">
         <commentGenerator>
             <property name="suppressDate" value="true" />
@@ -9,23 +9,29 @@
                 driverClass="com.mysql.jdbc.Driver"
                 connectionURL="jdbc:mysql://localhost:3306/tournament"
                 userId="root"
-                password="root" />
+                password="root">
+                <property name="nullCatalogMeansCurrent" value="true" />
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="useJSR310Types" value="true"/>
+        </javaTypeResolver>
         <javaModelGenerator
                 targetPackage="club.uctennis.tournament.domain.model"
-                targetProject="src/main/java">
+                targetProject="tournament/src/main/java">
             <property name="enableSubPackages" value="true" />
         </javaModelGenerator>
         <sqlMapGenerator
                 targetPackage="club.uctennis.tournament.domain.mapper"
-                targetProject="src/main/resources">
+                targetProject="tournament/src/main/resources">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
         <javaClientGenerator
                 targetPackage="club.uctennis.tournament.domain.mapper"
-                targetProject="src/main/java" type="MIXEDMAPPER">
+                targetProject="tournament/src/main/java" type="MIXEDMAPPER">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
-        <table tableName="%"
+        <table schema="tournament"
+               tableName="%"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="false"
