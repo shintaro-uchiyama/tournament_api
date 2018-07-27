@@ -18,9 +18,18 @@ public class Mutation implements GraphQLMutationResolver {
   @Autowired
   private EntryService entryService;
 
-  public PreEntry preEntryTournament(String teamName, String representiveName, String email,
-      String phone) {
-    return entryService.preEntry(teamName, representiveName, email, phone);
+  /**
+   * 大会への仮申込.
+   *
+   * @param teamName
+   * @param representiveName
+   * @param email
+   * @param phone
+   * @return
+   */
+  public PreEntry preEntryTournament(String teamId, String teamName, String representiveName,
+      String email, String phone) {
+    return entryService.preEntry(teamId, teamName, representiveName, email, phone);
   }
 
 }

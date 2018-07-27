@@ -1,20 +1,21 @@
 type Query {
-    # Find all tournaments
-    tournaments: [Tournament]!
+  # Find all tournaments
+  tournaments: [Tournament]!
 }
 
 type Tournament {
-    id: String!
-    title: String!
-    subtitle: String!
-    date: String!
-    image: String!
-    description: String!
+  id: String!
+  title: String!
+  subtitle: String!
+  date: String!
+  image: String!
+  description: String!
 }
 
 type Mutation {
-  # PreEntry tournament
+  # Entry Tournament
   preEntryTournament(
+    tournamentId: String!
     teamName: String!
     representiveName: String!
     email: String!
@@ -23,7 +24,7 @@ type Mutation {
 }
 
 type PreEntry {
-  id: String!
+  tournamentId: String!
   teamName: String!
   representiveName: String!
   email: String!
