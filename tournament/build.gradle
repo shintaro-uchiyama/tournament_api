@@ -63,4 +63,7 @@ dependencies {
 
   // Bean Mapper
   compile ('org.modelmapper:modelmapper:2.1.0')
+
+  // For mail
+  compile('org.springframework.boot:spring-boot-starter-mail')
 }

@@ -4,3 +4,7 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
+  mail:
+    host: mailcatcher01
+    port: 1025
+    
