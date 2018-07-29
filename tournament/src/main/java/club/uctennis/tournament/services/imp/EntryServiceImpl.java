@@ -1,15 +1,20 @@
 package club.uctennis.tournament.services.imp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import club.uctennis.tournament.domain.mapper.PreEntriesMapper;
+import club.uctennis.tournament.domain.mapper.ext.ExtEntriesMapper;
 import club.uctennis.tournament.domain.model.PreEntries;
 import club.uctennis.tournament.services.EntryService;
+import club.uctennis.tournament.types.Error;
 import club.uctennis.tournament.types.PreEntry;
+import club.uctennis.tournament.types.PreEntryResponse;
 
 /**
  * 大会申込み関連のロジック.
@@ -22,6 +27,9 @@ public class EntryServiceImpl implements EntryService {
 
   @Autowired
   private PreEntriesMapper preEntriesMapper;
+
+  @Autowired
+  private ExtEntriesMapper extEntriesMapper;
 
   @Autowired
   private ModelMapper modelMapper;
@@ -39,10 +47,19 @@ public class EntryServiceImpl implements EntryService {
    * @param phone
    * @return
    */
-  public PreEntry preEntry(String teamId, String teamName, String representiveName, String email,
-      String phone) {
-
+  public PreEntryResponse preEntry(String teamId, String teamName, String representiveName,
+      String email, String phone) throws IllegalAccessException {
+    PreEntryResponse preEntryResponse = new PreEntryResponse();
     // 登録済みのメールアドレスか確認
+    if (extEntriesMapper.selectByEmail(email) != null) {
+      List<Error> errors = new ArrayList<Error>();
+      Error error = new Error();
+      error.setType("email duplicate");
+      error.setMessage("entry email is duplicate");
+      errors.add(error);
+      preEntryResponse.setErrors(errors);
+      return preEntryResponse;
+    }
 
     // 仮登録
     PreEntries preEntries = new PreEntries();
@@ -64,6 +81,8 @@ public class EntryServiceImpl implements EntryService {
     msg.setText("大会登録完了");
     this.sender.send(msg);
 
-    return modelMapper.map(preEntries, PreEntry.class);
+    // レスポンスにセット
+    preEntryResponse.setPreEntry(modelMapper.map(preEntries, PreEntry.class));
+    return preEntryResponse;
   }
 }

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import club.uctennis.tournament.services.EntryService;
-import club.uctennis.tournament.types.PreEntry;
+import club.uctennis.tournament.types.PreEntryResponse;
 
 /**
  * GraphQL更新系.
@@ -27,8 +27,8 @@ public class Mutation implements GraphQLMutationResolver {
    * @param phone
    * @return
    */
-  public PreEntry preEntryTournament(String teamId, String teamName, String representiveName,
-      String email, String phone) {
+  public PreEntryResponse preEntryTournament(String teamId, String teamName,
+      String representiveName, String email, String phone) throws IllegalAccessException {
     return entryService.preEntry(teamId, teamName, representiveName, email, phone);
   }
 

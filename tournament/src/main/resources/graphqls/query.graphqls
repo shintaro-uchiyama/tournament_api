@@ -1,3 +1,8 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
 type Query {
   # Find all tournaments
   tournaments: [Tournament]!
@@ -20,15 +25,25 @@ type Mutation {
     representiveName: String!
     email: String!
     phone: String!
-  ): PreEntry
+  ): PreEntryResponse
+}
+
+type PreEntryResponse {
+  preEntry: PreEntry
+  errors: [Error]
 }
 
 type PreEntry {
-  tournamentId: String!
-  teamName: String!
-  representiveName: String!
-  email: String!
-  phone: String!
-  createDate: String!
-  updateDate: String!
+  tournamentId: String
+  teamName: String
+  representiveName: String
+  email: String
+  phone: String
+  createDate: String
+  updateDate: String
+}
+
+type Error {
+  type: String
+  message: String
 }

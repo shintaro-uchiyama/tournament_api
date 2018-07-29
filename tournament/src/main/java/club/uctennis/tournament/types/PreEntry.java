@@ -3,7 +3,7 @@ package club.uctennis.tournament.types;
 import lombok.Data;
 
 /**
- * GraphQL(Mutation) preEntryTournamentメソッドの戻り値.
+ * GraphQL(Mutation) preEntryTournamentメソッドの結果戻り値.
  *
  * @author uchiyama-shintaro
  *

@@ -1,6 +1,6 @@
 package club.uctennis.tournament.services;
 
-import club.uctennis.tournament.types.PreEntry;
+import club.uctennis.tournament.types.PreEntryResponse;
 
 /**
  * 大会申込み関連のロジックインターフェース.
@@ -19,8 +19,9 @@ public interface EntryService {
    * @param email
    * @param phone
    * @return
+   * @throws IllegalAccessException
    */
-  public PreEntry preEntry(String teamId, String teamName, String representiveName, String email,
-      String phone);
+  public PreEntryResponse preEntry(String teamId, String teamName, String representiveName,
+      String email, String phone) throws IllegalAccessException;
 
 }
