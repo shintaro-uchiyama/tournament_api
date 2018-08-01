@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,6 +28,7 @@ import club.uctennis.tournament.types.PreEntryResponse;
  *
  */
 @Service
+@ConfigurationProperties(prefix = "app")
 public class EntryServiceImpl implements EntryService {
 
   @Autowired
@@ -43,6 +45,15 @@ public class EntryServiceImpl implements EntryService {
 
   @Autowired
   private MailSender sender;
+
+  private String host;
+
+  /**
+   * @param host セットする host
+   */
+  public void setHost(String host) {
+    this.host = host;
+  }
 
   /**
    * 大会への仮登録.
@@ -96,7 +107,7 @@ public class EntryServiceImpl implements EntryService {
     msg.setFrom("test-from@mexample.com");
     msg.setTo("test-to@mexample.com");
     msg.setSubject("大会仮登録完了");
-    msg.setText("大会登録完了");
+    msg.setText("大会登録完了" + host);
     this.sender.send(msg);
 
     // レスポンスにセット
