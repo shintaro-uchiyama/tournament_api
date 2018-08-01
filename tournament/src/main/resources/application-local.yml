@@ -18,6 +18,6 @@ graphiql:
     enabled: true
     pageTitle: GraphiQL
 app:
-    schema: https
-    host: pdomain
-    port: 80
+    schema: http
+    host: localhost
+    port: 3000
