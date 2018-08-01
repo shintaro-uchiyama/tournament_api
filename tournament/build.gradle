@@ -66,4 +66,8 @@ dependencies {
 
   // For mail
   compile('org.springframework.boot:spring-boot-starter-mail')
+
+  // For Security
+  // compile('org.springframework.boot:spring-boot-starter-security')
+  compile('org.springframework.security:spring-security-crypto')
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.uctennis.tournament.domain.mapper.ext.ExtPreEntriesMapper">
+      <insert id="insertPreEntry" parameterType="club.uctennis.tournament.domain.model.PreEntries">
+        INSERT INTO pre_entries(
+          tournament_id, team_name, representive_name, email, phone)
+        VALUES(
+          #{tournamentId}, #{teamName}, #{representiveName}, #{email}, #{phone}
+        );
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+          select @@IDENTITY
+        </selectKey>
+      </insert>
+</mapper>

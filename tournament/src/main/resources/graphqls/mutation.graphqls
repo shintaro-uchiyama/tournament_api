@@ -1,0 +1,30 @@
+type Mutation {
+  # Entry Tournament
+  preEntryTournament(
+    tournamentId: String!
+    teamName: String!
+    representiveName: String!
+    email: String!
+    phone: String!
+  ): PreEntryResponse
+}
+
+type PreEntryResponse {
+  preEntry: PreEntry
+  errors: [Error]
+}
+
+type PreEntry {
+  tournamentId: String
+  teamName: String
+  representiveName: String
+  email: String
+  phone: String
+  createDate: String
+  updateDate: String
+}
+
+type Error {
+  type: String
+  message: String
+}

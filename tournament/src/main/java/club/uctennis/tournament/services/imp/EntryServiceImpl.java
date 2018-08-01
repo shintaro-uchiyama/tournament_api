@@ -7,9 +7,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import club.uctennis.tournament.domain.mapper.PreEntriesMapper;
+import club.uctennis.tournament.domain.mapper.OnetimeTokensMapper;
 import club.uctennis.tournament.domain.mapper.ext.ExtEntriesMapper;
+import club.uctennis.tournament.domain.mapper.ext.ExtPreEntriesMapper;
+import club.uctennis.tournament.domain.model.OnetimeTokens;
 import club.uctennis.tournament.domain.model.PreEntries;
 import club.uctennis.tournament.services.EntryService;
 import club.uctennis.tournament.types.Error;
@@ -26,10 +30,13 @@ import club.uctennis.tournament.types.PreEntryResponse;
 public class EntryServiceImpl implements EntryService {
 
   @Autowired
-  private PreEntriesMapper preEntriesMapper;
+  private ExtPreEntriesMapper extPreEntriesMapper;
 
   @Autowired
   private ExtEntriesMapper extEntriesMapper;
+
+  @Autowired
+  private OnetimeTokensMapper onetimeTokensMapper;
 
   @Autowired
   private ModelMapper modelMapper;
@@ -40,16 +47,18 @@ public class EntryServiceImpl implements EntryService {
   /**
    * 大会への仮登録.
    *
-   * @param teamId
+   * @param tournamentId
    * @param teamName
    * @param representiveName
    * @param email
    * @param phone
    * @return
    */
-  public PreEntryResponse preEntry(String teamId, String teamName, String representiveName,
+  public PreEntryResponse preEntry(String tournamentId, String teamName, String representiveName,
       String email, String phone) throws IllegalAccessException {
+
     PreEntryResponse preEntryResponse = new PreEntryResponse();
+
     // 登録済みのメールアドレスか確認
     if (extEntriesMapper.selectByEmail(email) != null) {
       List<Error> errors = new ArrayList<Error>();
@@ -62,8 +71,9 @@ public class EntryServiceImpl implements EntryService {
     }
 
     // 仮登録
+    //// 仮登録テーブルに登録
     PreEntries preEntries = new PreEntries();
-    preEntries.setTournamentId(Integer.parseInt(teamId));
+    preEntries.setTournamentId(Integer.parseInt(tournamentId));
     preEntries.setTeamName(teamName);
     preEntries.setRepresentiveName(representiveName);
     preEntries.setEmail(email);
@@ -71,7 +81,15 @@ public class EntryServiceImpl implements EntryService {
     LocalDateTime now = LocalDateTime.now();
     preEntries.setCreateDate(now);
     preEntries.setUpdateDate(now);
-    preEntriesMapper.insertSelective(preEntries);
+    extPreEntriesMapper.insertPreEntry(preEntries);
+    //// ワンタイムトークンを生成
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    String digest = passwordEncoder.encode(String.valueOf(preEntries.getId()));
+    OnetimeTokens onetimeToken = new OnetimeTokens();
+    onetimeToken.setPreEntryId(preEntries.getId());
+    onetimeToken.setToken(digest);
+    onetimeToken.setLimitedDate(now.plusDays(1));
+    onetimeTokensMapper.insertSelective(onetimeToken);
 
     // 仮登録完了メール送信
     SimpleMailMessage msg = new SimpleMailMessage();

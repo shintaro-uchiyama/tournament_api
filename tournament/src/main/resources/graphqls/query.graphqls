@@ -1,8 +1,3 @@
-schema {
-    query: Query
-    mutation: Mutation
-}
-
 type Query {
   # Find all tournaments
   tournaments: [Tournament]!
@@ -15,35 +10,4 @@ type Tournament {
   date: String!
   image: String!
   description: String!
-}
-
-type Mutation {
-  # Entry Tournament
-  preEntryTournament(
-    tournamentId: String!
-    teamName: String!
-    representiveName: String!
-    email: String!
-    phone: String!
-  ): PreEntryResponse
-}
-
-type PreEntryResponse {
-  preEntry: PreEntry
-  errors: [Error]
-}
-
-type PreEntry {
-  tournamentId: String
-  teamName: String
-  representiveName: String
-  email: String
-  phone: String
-  createDate: String
-  updateDate: String
-}
-
-type Error {
-  type: String
-  message: String
 }

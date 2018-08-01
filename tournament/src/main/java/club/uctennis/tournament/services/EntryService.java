@@ -13,7 +13,7 @@ public interface EntryService {
   /**
    * 大会への仮登録.
    *
-   * @param teamId
+   * @param tournamentId
    * @param teamName
    * @param representiveName
    * @param email
@@ -21,7 +21,7 @@ public interface EntryService {
    * @return
    * @throws IllegalAccessException
    */
-  public PreEntryResponse preEntry(String teamId, String teamName, String representiveName,
+  public PreEntryResponse preEntry(String tournamentId, String teamName, String representiveName,
       String email, String phone) throws IllegalAccessException;
 
 }

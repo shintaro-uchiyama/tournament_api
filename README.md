@@ -37,24 +37,43 @@ http://tournament.local/graphiql
 ```
 query
 ```
-{
+query GetTournaments {
   tournaments {
     id
-    title
+    subtitle
+    date
+    image
+    description
   }
 }
 ```
 ### Mutation
-Mutationの例
+Mutationの例（エラー付）
 
 ```
-mutation {
-  preEntryTournament(teamName: "team", representiveName: "rep", email: "email",phone: "030") {
-    teamName
-    representiveName
-    email
-    phone
+# mutation
+mutation PreEntryTournament($tournamentId: String!, $teamName: String!, $representiveName: String!, $email: String!, $phone: String!) {
+  preEntryTournament(tournamentId: $tournamentId, teamName: $teamName, representiveName: $representiveName, email: $email, phone: $phone) {
+    preEntry{
+      teamName
+      representiveName
+      email
+      phone
+    }
+    errors {
+      type
+      message
+    }
   }
+}
+
+# variables
+{
+  "tournamentId": "1",
+  "teamName": "team",
+  "representiveName": "rep",
+  "email": "email",
+  "phone": "030"
 }
 ```
 

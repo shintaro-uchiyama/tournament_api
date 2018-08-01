@@ -21,15 +21,16 @@ public class Mutation implements GraphQLMutationResolver {
   /**
    * 大会への仮申込.
    *
+   * @param tournamentId
    * @param teamName
    * @param representiveName
    * @param email
    * @param phone
    * @return
    */
-  public PreEntryResponse preEntryTournament(String teamId, String teamName,
+  public PreEntryResponse preEntryTournament(String tournamentId, String teamName,
       String representiveName, String email, String phone) throws IllegalAccessException {
-    return entryService.preEntry(teamId, teamName, representiveName, email, phone);
+    return entryService.preEntry(tournamentId, teamName, representiveName, email, phone);
   }
 
 }
