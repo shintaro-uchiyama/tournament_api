@@ -1,5 +1,6 @@
 package club.uctennis.tournament.services.imp;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 import club.uctennis.tournament.domain.mapper.OnetimeTokensMapper;
 import club.uctennis.tournament.domain.mapper.ext.ExtEntriesMapper;
 import club.uctennis.tournament.domain.mapper.ext.ExtPreEntriesMapper;
@@ -46,7 +48,23 @@ public class EntryServiceImpl implements EntryService {
   @Autowired
   private MailSender sender;
 
+  private String schema;
   private String host;
+  private String port;
+
+  /**
+   * @param schema セットする schema
+   */
+  public void setSchema(String schema) {
+    this.schema = schema;
+  }
+
+  /**
+   * @param port セットする port
+   */
+  public void setPort(String port) {
+    this.port = port;
+  }
 
   /**
    * @param host セットする host
@@ -107,7 +125,9 @@ public class EntryServiceImpl implements EntryService {
     msg.setFrom("test-from@mexample.com");
     msg.setTo("test-to@mexample.com");
     msg.setSubject("大会仮登録完了");
-    msg.setText("大会登録完了" + host);
+    UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+    URI location = builder.scheme(schema).host(host).port(port).path("/regist").build().toUri();
+    msg.setText("大会登録完了" + location.toString());
     this.sender.send(msg);
 
     // レスポンスにセット
