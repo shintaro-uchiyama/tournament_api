@@ -1,21 +1,17 @@
 package club.uctennis.tournament.services.imp;
 
-import java.io.StringWriter;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,8 +23,10 @@ import club.uctennis.tournament.domain.model.OnetimeTokens;
 import club.uctennis.tournament.domain.model.PreEntries;
 import club.uctennis.tournament.services.EntryService;
 import club.uctennis.tournament.types.Error;
+import club.uctennis.tournament.types.MailSendForm;
 import club.uctennis.tournament.types.PreEntry;
 import club.uctennis.tournament.types.PreEntryResponse;
+import club.uctennis.tournament.utils.MailBuilderUtils;
 
 /**
  * 大会申込み関連のロジック.
@@ -39,7 +37,6 @@ import club.uctennis.tournament.types.PreEntryResponse;
 @Service
 @ConfigurationProperties(prefix = "app")
 public class EntryServiceImpl implements EntryService {
-
   @Autowired
   private ExtPreEntriesMapper extPreEntriesMapper;
 
@@ -53,13 +50,15 @@ public class EntryServiceImpl implements EntryService {
   private ModelMapper modelMapper;
 
   @Autowired
-  private JavaMailSender javaMailSender;
+  private MailSender mailSender;
 
   private String schema;
   private String host;
   private String port;
 
   /**
+   * ConfigurationPropertiesはsetterが必要.
+   *
    * @param schema セットする schema
    */
   public void setSchema(String schema) {
@@ -67,6 +66,8 @@ public class EntryServiceImpl implements EntryService {
   }
 
   /**
+   * ConfigurationPropertiesはsetterが必要.
+   *
    * @param port セットする port
    */
   public void setPort(String port) {
@@ -74,6 +75,8 @@ public class EntryServiceImpl implements EntryService {
   }
 
   /**
+   * ConfigurationPropertiesはsetterが必要.
+   *
    * @param host セットする host
    */
   public void setHost(String host) {
@@ -111,7 +114,6 @@ public class EntryServiceImpl implements EntryService {
     PreEntries preEntries =
         createPreEntries(tournamentId, teamName, representiveName, email, phone);
     extPreEntriesMapper.insertPreEntry(preEntries);
-
     //// ワンタイムトークンテーブルに登録
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     String token = passwordEncoder.encode(String.valueOf(preEntries.getId()));
@@ -122,27 +124,8 @@ public class EntryServiceImpl implements EntryService {
     UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
     URI location =
         builder.scheme(schema).host(host).port(port).path("/regist/" + token).build().toUri();
-
-    VelocityContext context = new VelocityContext();
-    context.put("representiveName", representiveName);
-    context.put("validationUrl", location.toString());
-
-    VelocityEngine velocityEngine = new VelocityEngine();
-    velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-    velocityEngine.setProperty("classpath.resource.loader.class",
-        ClasspathResourceLoader.class.getName());
-    velocityEngine.init();
-
-    StringWriter writer = new StringWriter();
-    velocityEngine.mergeTemplate("/templates/ValidationMail.vm", "UTF-8", context, writer);
-
-    MimeMessage msg = javaMailSender.createMimeMessage();
-    MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-    helper.setFrom("test-from@mexample.com");
-    helper.setTo("test-to@mexample.com");
-    helper.setSubject("大会仮登録完了");
-    msg.setText(writer.toString());
-    javaMailSender.send(msg);
+    SimpleMailMessage mailMessage = createMailMessage(representiveName, location.toString());
+    mailSender.send(mailMessage);
 
     // レスポンスにセット
     preEntryResponse.setPreEntry(modelMapper.map(preEntries, PreEntry.class));
@@ -172,7 +155,7 @@ public class EntryServiceImpl implements EntryService {
 
   /**
    * ワンタイムトークンテーブル用のDTO生成.
-   * 
+   *
    * @param preEntryId
    * @param token
    * @param limitedDate
@@ -185,5 +168,25 @@ public class EntryServiceImpl implements EntryService {
     onetimeToken.setToken(token);
     onetimeToken.setLimitedDate(limitedDate);
     return onetimeToken;
+  }
+
+  /**
+   * 仮登録完了メール作成.
+   * 
+   * @param representiveName
+   * @param validationUrl
+   * @return
+   */
+  private SimpleMailMessage createMailMessage(String representiveName, String validationUrl) {
+    Map<String, Object> model = new HashMap<>();
+    model.put("representiveName", representiveName);
+    model.put("validationUrl", validationUrl);
+
+    MailSendForm mailSendForm = new MailSendForm();
+    mailSendForm.setFrom("test-from@mexample.com");
+    mailSendForm.setTo("test-to@mexample.com");
+    mailSendForm.setSubject("大会仮登録完了");
+    return MailBuilderUtils.build().setMailSendForm(mailSendForm)
+        .setTemplateLocation("/templates/ValidationMail.vm").setTemplateVariables(model).create();
   }
 }
