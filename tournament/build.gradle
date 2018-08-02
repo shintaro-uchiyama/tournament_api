@@ -64,10 +64,12 @@ dependencies {
   // Bean Mapper
   compile ('org.modelmapper:modelmapper:2.1.0')
 
+  // valocity
+  compile('org.springframework.boot:spring-boot-starter-velocity:1.4.7.RELEASE')
+  compile('org.springframework:spring-context-support:3.2.2.RELEASE')
   // For mail
   compile('org.springframework.boot:spring-boot-starter-mail')
 
-  // For Security
-  // compile('org.springframework.boot:spring-boot-starter-security')
+  // For Hash
   compile('org.springframework.security:spring-security-crypto')
 }

@@ -7,6 +7,10 @@ spring:
     mail:
         host: mailcatcher01
         port: 1025
+    velocity:
+        enabled: false
+        charset: UTF-8
+        cache: false
 graphql:
     servlet:
         mapping: /graphql

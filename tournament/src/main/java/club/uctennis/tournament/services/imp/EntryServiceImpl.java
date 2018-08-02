@@ -1,14 +1,21 @@
 package club.uctennis.tournament.services.imp;
 
+import java.io.StringWriter;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,7 +53,10 @@ public class EntryServiceImpl implements EntryService {
   private ModelMapper modelMapper;
 
   @Autowired
-  private MailSender sender;
+  private JavaMailSender javaMailSender;
+
+  // @Autowired
+  // private VelocityEngine velocityEngine;
 
   private String schema;
   private String host;
@@ -108,8 +118,6 @@ public class EntryServiceImpl implements EntryService {
     preEntries.setEmail(email);
     preEntries.setPhone(phone);
     LocalDateTime now = LocalDateTime.now();
-    preEntries.setCreateDate(now);
-    preEntries.setUpdateDate(now);
     extPreEntriesMapper.insertPreEntry(preEntries);
     //// ワンタイムトークンを生成
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -121,14 +129,32 @@ public class EntryServiceImpl implements EntryService {
     onetimeTokensMapper.insertSelective(onetimeToken);
 
     // 仮登録完了メール送信
-    SimpleMailMessage msg = new SimpleMailMessage();
-    msg.setFrom("test-from@mexample.com");
-    msg.setTo("test-to@mexample.com");
-    msg.setSubject("大会仮登録完了");
-    UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-    URI location = builder.scheme(schema).host(host).port(port).path("/regist").build().toUri();
-    msg.setText("大会登録完了" + location.toString());
-    this.sender.send(msg);
+    try {
+      UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+      URI location = builder.scheme(schema).host(host).port(port).path("/regist").build().toUri();
+
+      MimeMessage msg = javaMailSender.createMimeMessage();
+      MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+      VelocityContext context = new VelocityContext();
+      context.put("representiveName", representiveName);
+      context.put("validationUrl", location.toString());
+      StringWriter writer = new StringWriter();
+      VelocityEngine velocityEngine = new VelocityEngine();
+      velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+      velocityEngine.setProperty("classpath.resource.loader.class",
+          ClasspathResourceLoader.class.getName());
+      velocityEngine.init();
+
+      velocityEngine.mergeTemplate("/templates/ValidationMail.vm", "UTF-8", context, writer);
+
+      helper.setFrom("test-from@mexample.com");
+      helper.setTo("test-to@mexample.com");
+      helper.setSubject("大会仮登録完了");
+      msg.setText(writer.toString());
+      javaMailSender.send(msg);
+    } catch (MessagingException e) {
+      e.printStackTrace();
+    }
 
     // レスポンスにセット
     preEntryResponse.setPreEntry(modelMapper.map(preEntries, PreEntry.class));
