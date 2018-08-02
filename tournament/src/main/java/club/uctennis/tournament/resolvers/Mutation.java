@@ -1,5 +1,6 @@
 package club.uctennis.tournament.resolvers;
 
+import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +32,7 @@ public class Mutation implements GraphQLMutationResolver {
    */
   @Transactional
   public PreEntryResponse preEntryTournament(String tournamentId, String teamName,
-      String representiveName, String email, String phone) throws IllegalAccessException {
+      String representiveName, String email, String phone) throws MessagingException {
     return entryService.preEntry(tournamentId, teamName, representiveName, email, phone);
   }
-
 }

@@ -94,7 +94,7 @@ public class EntryServiceImpl implements EntryService {
    * @return
    */
   public PreEntryResponse preEntry(String tournamentId, String teamName, String representiveName,
-      String email, String phone) throws IllegalAccessException {
+      String email, String phone) throws MessagingException {
 
     PreEntryResponse preEntryResponse = new PreEntryResponse();
 
@@ -130,32 +130,28 @@ public class EntryServiceImpl implements EntryService {
     onetimeTokensMapper.insertSelective(onetimeToken);
 
     // 仮登録完了メール送信
-    try {
-      UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-      URI location = builder.scheme(schema).host(host).port(port).path("/regist").build().toUri();
+    UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+    URI location = builder.scheme(schema).host(host).port(port).path("/regist").build().toUri();
 
-      MimeMessage msg = javaMailSender.createMimeMessage();
-      MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-      VelocityContext context = new VelocityContext();
-      context.put("representiveName", representiveName);
-      context.put("validationUrl", location.toString());
-      StringWriter writer = new StringWriter();
-      VelocityEngine velocityEngine = new VelocityEngine();
-      velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-      velocityEngine.setProperty("classpath.resource.loader.class",
-          ClasspathResourceLoader.class.getName());
-      velocityEngine.init();
+    MimeMessage msg = javaMailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+    VelocityContext context = new VelocityContext();
+    context.put("representiveName", representiveName);
+    context.put("validationUrl", location.toString());
+    StringWriter writer = new StringWriter();
+    VelocityEngine velocityEngine = new VelocityEngine();
+    velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+    velocityEngine.setProperty("classpath.resource.loader.class",
+        ClasspathResourceLoader.class.getName());
+    velocityEngine.init();
 
-      velocityEngine.mergeTemplate("/templates/ValidationMail.vm", "UTF-8", context, writer);
+    velocityEngine.mergeTemplate("/templates/ValidationMail.vm", "UTF-8", context, writer);
 
-      helper.setFrom("test-from@mexample.com");
-      helper.setTo("test-to@mexample.com");
-      helper.setSubject("大会仮登録完了");
-      msg.setText(writer.toString());
-      javaMailSender.send(msg);
-    } catch (MessagingException e) {
-      e.printStackTrace();
-    }
+    helper.setFrom("test-from@mexample.com");
+    helper.setTo("test-to@mexample.com");
+    helper.setSubject("大会仮登録完了");
+    msg.setText(writer.toString());
+    javaMailSender.send(msg);
 
     // レスポンスにセット
     preEntryResponse.setPreEntry(modelMapper.map(preEntries, PreEntry.class));

@@ -1,5 +1,6 @@
 package club.uctennis.tournament.services;
 
+import javax.mail.MessagingException;
 import club.uctennis.tournament.types.PreEntryResponse;
 
 /**
@@ -22,6 +23,6 @@ public interface EntryService {
    * @throws IllegalAccessException
    */
   public PreEntryResponse preEntry(String tournamentId, String teamName, String representiveName,
-      String email, String phone) throws IllegalAccessException;
+      String email, String phone) throws MessagingException;
 
 }
