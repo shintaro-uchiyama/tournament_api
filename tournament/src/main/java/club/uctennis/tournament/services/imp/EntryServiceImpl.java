@@ -119,6 +119,7 @@ public class EntryServiceImpl implements EntryService {
     preEntries.setPhone(phone);
     LocalDateTime now = LocalDateTime.now();
     extPreEntriesMapper.insertPreEntry(preEntries);
+
     //// ワンタイムトークンを生成
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     String digest = passwordEncoder.encode(String.valueOf(preEntries.getId()));
