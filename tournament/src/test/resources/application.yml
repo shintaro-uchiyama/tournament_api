@@ -1,0 +1,29 @@
+spring:
+    datasource:
+        url: jdbc:mysql://localhost:3306/tournament_unit_test
+        username: root
+        password: root
+        driver-class-name: com.mysql.jdbc.Driver
+    mail:
+        host: mailcatcher01
+        port: 1025
+    velocity:
+        enabled: false
+        charset: UTF-8
+        cache: false
+graphql:
+    servlet:
+        mapping: /graphql
+        enabled: true
+        corsEnabled: true
+graphiql:
+    mapping: /graphiql
+    endpoint: /graphql
+    enabled: true
+    pageTitle: GraphiQL
+app:
+    schema: http
+    host: localhost
+    port: 3000
+logging:
+    file: logs/application-tennis.log
