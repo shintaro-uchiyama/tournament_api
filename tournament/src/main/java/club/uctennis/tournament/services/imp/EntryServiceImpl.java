@@ -3,6 +3,7 @@ package club.uctennis.tournament.services.imp;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.mail.MessagingException;
 import org.modelmapper.ModelMapper;
@@ -14,11 +15,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
+import club.uctennis.tournament.domain.mapper.EntriesMapper;
 import club.uctennis.tournament.domain.mapper.OnetimeTokensMapper;
+import club.uctennis.tournament.domain.mapper.PreEntriesMapper;
 import club.uctennis.tournament.domain.mapper.ext.ExtEntriesMapper;
+import club.uctennis.tournament.domain.mapper.ext.ExtOnetimeTokensMapper;
 import club.uctennis.tournament.domain.mapper.ext.ExtPreEntriesMapper;
+import club.uctennis.tournament.domain.model.Entries;
 import club.uctennis.tournament.domain.model.OnetimeTokens;
 import club.uctennis.tournament.domain.model.PreEntries;
+import club.uctennis.tournament.dto.EntryDto;
+import club.uctennis.tournament.dto.EntryDto.EntryResult;
 import club.uctennis.tournament.dto.PreEntryDto;
 import club.uctennis.tournament.dto.PreEntryDto.PreEntryResult;
 import club.uctennis.tournament.services.EntryService;
@@ -35,15 +42,23 @@ import club.uctennis.tournament.utils.MailBuilderUtils;
 @ConfigurationProperties(prefix = "app")
 public class EntryServiceImpl implements EntryService {
   @Autowired
+  private PreEntriesMapper preEntriesMapper;
+  @Autowired
+  private EntriesMapper entriesMapper;
+  @Autowired
   private ExtPreEntriesMapper extPreEntriesMapper;
   @Autowired
   private ExtEntriesMapper extEntriesMapper;
   @Autowired
   private OnetimeTokensMapper onetimeTokensMapper;
   @Autowired
+  private ExtOnetimeTokensMapper extOnetimeTokensMapper;
+  @Autowired
   private MailSender mailSender;
   @Autowired
   private PreEntryDto preEntryDto;
+  @Autowired
+  private EntryDto entryDto;
   @Autowired
   private ModelMapper modelMapper;
 
@@ -92,7 +107,8 @@ public class EntryServiceImpl implements EntryService {
       String email, String phone) throws MessagingException {
 
     // 登録済みのメールアドレスか確認
-    if (extEntriesMapper.selectByEmail(email) != null) {
+    Entries entries = extEntriesMapper.selectByEmail(email);
+    if (entries != null) {
       preEntryDto.setPreEntryResult(PreEntryResult.DUPLICATE);
       return preEntryDto;
     }
@@ -176,5 +192,30 @@ public class EntryServiceImpl implements EntryService {
     mailSendForm.setSubject("大会仮登録完了");
     return MailBuilderUtils.build().setMailSendForm(mailSendForm)
         .setTemplateLocation("/templates/ValidationMail.vm").setTemplateVariables(model).create();
+  }
+
+  /**
+   * 大会への本登録.
+   *
+   * @param token
+   * @return
+   */
+  public EntryDto entry(String token) {
+    List<OnetimeTokens> onetimeTokens =
+        extOnetimeTokensMapper.selectValidByToken(token, LocalDateTime.now());
+    if (onetimeTokens.isEmpty()) {
+      entryDto.setEntryResult(EntryResult.NOT_EXIST);
+    } else {
+      PreEntries preEntries =
+          preEntriesMapper.selectByPrimaryKey(onetimeTokens.get(0).getPreEntryId());
+      Entries entries = modelMapper.map(preEntries, Entries.class);
+      entries.setId(null);
+      entriesMapper.insertSelective(entries);
+      onetimeTokensMapper.deleteByPrimaryKey(onetimeTokens.get(0).getId());
+      preEntriesMapper.deleteByPrimaryKey(onetimeTokens.get(0).getPreEntryId());
+      entryDto = modelMapper.map(preEntries, EntryDto.class);
+      entryDto.setEntryResult(EntryResult.SAVE);
+    }
+    return entryDto;
   }
 }

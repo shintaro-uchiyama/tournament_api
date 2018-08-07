@@ -42,6 +42,7 @@
                enableCountByExample="false"
                selectByExampleQueryId="false"
                modelType="flat">
+               <property name="useActualColumnNames" value="false"/>
         </table>
     </context>
 </generatorConfiguration>

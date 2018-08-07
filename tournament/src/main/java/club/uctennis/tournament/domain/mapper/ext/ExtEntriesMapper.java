@@ -11,7 +11,7 @@ import club.uctennis.tournament.domain.model.Entries;
 public interface ExtEntriesMapper {
 
   /**
-   * メールアドレスが登録されているか確認する
+   * メールアドレスが登録されているか確認する.
    *
    * @param email
    * @return

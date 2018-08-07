@@ -7,13 +7,18 @@ type Mutation {
     email: String!
     phone: String!
   ): PreEntryResponse
+
+  # Verify Entry
+  entryTournament(
+    token: String!
+  ): EntryResponse
 }
 
+# For Entry Tournament
 type PreEntryResponse {
   preEntry: PreEntry
   errors: [Error]
 }
-
 type PreEntry {
   tournamentId: String
   teamName: String
@@ -24,6 +29,22 @@ type PreEntry {
   updateDate: String
 }
 
+# For Verify Entry
+type EntryResponse {
+  entry: Entry
+  errors: [Error]
+}
+type Entry {
+  tournamentId: String
+  teamName: String
+  representiveName: String
+  email: String
+  phone: String
+  createDate: String
+  updateDate: String
+}
+
+# Common
 type Error {
   type: String
   message: String

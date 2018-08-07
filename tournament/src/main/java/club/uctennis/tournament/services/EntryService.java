@@ -1,6 +1,7 @@
 package club.uctennis.tournament.services;
 
 import javax.mail.MessagingException;
+import club.uctennis.tournament.dto.EntryDto;
 import club.uctennis.tournament.dto.PreEntryDto;
 
 /**
@@ -24,5 +25,13 @@ public interface EntryService {
    */
   public PreEntryDto preEntry(String tournamentId, String teamName, String representiveName,
       String email, String phone) throws MessagingException;
+
+  /**
+   * 大会への本登録.
+   *
+   * @param token
+   * @return
+   */
+  public EntryDto entry(String token);
 
 }

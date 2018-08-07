@@ -3,7 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="club.uctennis.tournament.domain.mapper.ext.ExtEntriesMapper">
-    <select id="selectByEmail" resultType="club.uctennis.tournament.domain.model.Entries">
+    <resultMap id="BaseResultMap" type="club.uctennis.tournament.domain.model.Entries">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="tournament_id" jdbcType="INTEGER" property="tournamentId" />
+        <result column="team_name" jdbcType="VARCHAR" property="teamName" />
+        <result column="representive_name" jdbcType="VARCHAR" property="representiveName" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="edit_date" jdbcType="TIMESTAMP" property="editDate" />
+    </resultMap>
+
+    <select id="selectByEmail" resultMap="BaseResultMap">
         SELECT * FROM entries WHERE email = #{email,jdbcType=VARCHAR}
     </select>
 </mapper>
