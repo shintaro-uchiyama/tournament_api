@@ -31,12 +31,6 @@ public class Mutation implements GraphQLMutationResolver {
   @Autowired
   private EntryService entryService;
   @Autowired
-  private Error error;
-  @Autowired
-  private PreEntryResponse preEntryResponse;
-  @Autowired
-  private EntryResponse entryResponse;
-  @Autowired
   private ModelMapper modelMapper;
 
   /**
@@ -54,8 +48,10 @@ public class Mutation implements GraphQLMutationResolver {
       String representiveName, String email, String phone) throws MessagingException {
     PreEntryDto preEntryDto =
         entryService.preEntry(tournamentId, teamName, representiveName, email, phone);
+    PreEntryResponse preEntryResponse = new PreEntryResponse();
     if (preEntryDto.getPreEntryResult() == PreEntryResult.DUPLICATE) {
       List<Error> errors = new ArrayList<Error>();
+      Error error = new Error();
       error.setType("001");
       error.setMessage("entry email is duplicate");
       errors.add(error);
@@ -75,8 +71,10 @@ public class Mutation implements GraphQLMutationResolver {
   @Transactional
   public EntryResponse entryTournament(String token) {
     EntryDto entryDto = entryService.entry(token);
+    EntryResponse entryResponse = new EntryResponse();
     if (entryDto.getEntryResult() == EntryResult.NOT_EXIST) {
       List<Error> errors = new ArrayList<Error>();
+      Error error = new Error();
       error.setType("002");
       error.setMessage("token is not valid");
       errors.add(error);

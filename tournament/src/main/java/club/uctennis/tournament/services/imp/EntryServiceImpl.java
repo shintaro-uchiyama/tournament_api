@@ -206,16 +206,40 @@ public class EntryServiceImpl implements EntryService {
     if (onetimeTokens.isEmpty()) {
       entryDto.setEntryResult(EntryResult.NOT_EXIST);
     } else {
+      // 申込み本登録
       PreEntries preEntries =
           preEntriesMapper.selectByPrimaryKey(onetimeTokens.get(0).getPreEntryId());
       Entries entries = modelMapper.map(preEntries, Entries.class);
       entries.setId(null);
       entriesMapper.insertSelective(entries);
+      // 仮申込、ワンタイムトークン削除
       onetimeTokensMapper.deleteByPrimaryKey(onetimeTokens.get(0).getId());
       preEntriesMapper.deleteByPrimaryKey(onetimeTokens.get(0).getPreEntryId());
       entryDto = modelMapper.map(preEntries, EntryDto.class);
+      // 申込み完了メール送信
+      SimpleMailMessage mailMessage = createCompleteMailMessage(preEntries);
+      mailSender.send(mailMessage);
       entryDto.setEntryResult(EntryResult.SAVE);
     }
     return entryDto;
+  }
+
+  /**
+   * 登録完了メール作成.
+   *
+   * @param preEntries
+   * @return
+   */
+  private SimpleMailMessage createCompleteMailMessage(PreEntries preEntries) {
+    Map<String, Object> model = new HashMap<>();
+    model.put("representiveName", preEntries.getRepresentiveName());
+    model.put("teamName", preEntries.getTeamName());
+
+    MailSendForm mailSendForm = new MailSendForm();
+    mailSendForm.setFrom("test-from@mexample.com");
+    mailSendForm.setTo(preEntries.getEmail());
+    mailSendForm.setSubject("大会本登録完了");
+    return MailBuilderUtils.build().setMailSendForm(mailSendForm)
+        .setTemplateLocation("/templates/CompleteMail.vm").setTemplateVariables(model).create();
   }
 }
