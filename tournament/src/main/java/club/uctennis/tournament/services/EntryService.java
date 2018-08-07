@@ -1,7 +1,7 @@
 package club.uctennis.tournament.services;
 
 import javax.mail.MessagingException;
-import club.uctennis.tournament.types.PreEntryResponse;
+import club.uctennis.tournament.dto.PreEntryDto;
 
 /**
  * 大会申込み関連のロジックインターフェース.
@@ -22,7 +22,7 @@ public interface EntryService {
    * @return
    * @throws IllegalAccessException
    */
-  public PreEntryResponse preEntry(String tournamentId, String teamName, String representiveName,
+  public PreEntryDto preEntry(String tournamentId, String teamName, String representiveName,
       String email, String phone) throws MessagingException;
 
 }

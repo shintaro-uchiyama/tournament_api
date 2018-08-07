@@ -2,9 +2,7 @@ package club.uctennis.tournament.services.imp;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.mail.MessagingException;
 import org.modelmapper.ModelMapper;
@@ -21,11 +19,10 @@ import club.uctennis.tournament.domain.mapper.ext.ExtEntriesMapper;
 import club.uctennis.tournament.domain.mapper.ext.ExtPreEntriesMapper;
 import club.uctennis.tournament.domain.model.OnetimeTokens;
 import club.uctennis.tournament.domain.model.PreEntries;
+import club.uctennis.tournament.dto.PreEntryDto;
+import club.uctennis.tournament.dto.PreEntryDto.PreEntryResult;
 import club.uctennis.tournament.services.EntryService;
-import club.uctennis.tournament.types.Error;
 import club.uctennis.tournament.types.MailSendForm;
-import club.uctennis.tournament.types.PreEntry;
-import club.uctennis.tournament.types.PreEntryResponse;
 import club.uctennis.tournament.utils.MailBuilderUtils;
 
 /**
@@ -39,18 +36,16 @@ import club.uctennis.tournament.utils.MailBuilderUtils;
 public class EntryServiceImpl implements EntryService {
   @Autowired
   private ExtPreEntriesMapper extPreEntriesMapper;
-
   @Autowired
   private ExtEntriesMapper extEntriesMapper;
-
   @Autowired
   private OnetimeTokensMapper onetimeTokensMapper;
-
-  @Autowired
-  private ModelMapper modelMapper;
-
   @Autowired
   private MailSender mailSender;
+  @Autowired
+  private PreEntryDto preEntryDto;
+  @Autowired
+  private ModelMapper modelMapper;
 
   private String schema;
   private String host;
@@ -93,20 +88,13 @@ public class EntryServiceImpl implements EntryService {
    * @param phone
    * @return
    */
-  public PreEntryResponse preEntry(String tournamentId, String teamName, String representiveName,
+  public PreEntryDto preEntry(String tournamentId, String teamName, String representiveName,
       String email, String phone) throws MessagingException {
-
-    PreEntryResponse preEntryResponse = new PreEntryResponse();
 
     // 登録済みのメールアドレスか確認
     if (extEntriesMapper.selectByEmail(email) != null) {
-      List<Error> errors = new ArrayList<Error>();
-      Error error = new Error();
-      error.setType("email duplicate");
-      error.setMessage("entry email is duplicate");
-      errors.add(error);
-      preEntryResponse.setErrors(errors);
-      return preEntryResponse;
+      preEntryDto.setPreEntryResult(PreEntryResult.DUPLICATE);
+      return preEntryDto;
     }
 
     // 仮登録
@@ -119,17 +107,17 @@ public class EntryServiceImpl implements EntryService {
     String token = passwordEncoder.encode(String.valueOf(preEntries.getId()));
     onetimeTokensMapper.insertSelective(
         createOnetimeToken(preEntries.getId(), token, LocalDateTime.now().plusDays(1)));
-
-    // 仮登録完了メール送信
+    //// 仮登録完了メール送信
     UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
     URI location =
         builder.scheme(schema).host(host).port(port).path("/regist/" + token).build().toUri();
     SimpleMailMessage mailMessage = createMailMessage(representiveName, location.toString());
     mailSender.send(mailMessage);
+    preEntryDto = modelMapper.map(preEntries, PreEntryDto.class);
+    preEntryDto.setPreEntryResult(PreEntryResult.SAVE);
 
     // レスポンスにセット
-    preEntryResponse.setPreEntry(modelMapper.map(preEntries, PreEntry.class));
-    return preEntryResponse;
+    return preEntryDto;
   }
 
   /**
@@ -172,7 +160,7 @@ public class EntryServiceImpl implements EntryService {
 
   /**
    * 仮登録完了メール作成.
-   * 
+   *
    * @param representiveName
    * @param validationUrl
    * @return
