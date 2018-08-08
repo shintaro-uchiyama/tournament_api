@@ -1,6 +1,7 @@
 package club.uctennis.tournament.resolvers;
 
 import static org.junit.Assert.*;
+import javax.mail.MessagingException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import club.uctennis.tournament.CsvDataSetLoader;
-import club.uctennis.tournament.domain.mapper.PreEntriesMapper;
-import club.uctennis.tournament.domain.model.PreEntries;
+import club.uctennis.tournament.types.PreEntryResponse;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -29,7 +31,7 @@ import club.uctennis.tournament.domain.model.PreEntries;
 @Transactional
 public class MutationTest {
   @Autowired
-  private PreEntriesMapper preEntriesMapper;
+  private Mutation mutation;
 
   @Before
   public void setup() {
@@ -43,8 +45,25 @@ public class MutationTest {
 
   @Test
   @DatabaseSetup(value = "/club/uctennis/tournament/resolvers/mutations/")
-  public void testPreEntryTournamentDuplicate() {
-    PreEntries PreEntries = preEntriesMapper.selectByPrimaryKey(5);
-    assertEquals("email5", PreEntries.getEmail());
+  public void testPreEntryTournamentDuplicate() throws MessagingException {
+    PreEntryResponse preEntryResponse =
+        mutation.preEntryTournament("1", "team1", "representive1", "email1", "phone1");
+    assertEquals("001", preEntryResponse.getErrors().get(0).getType());
+    assertNull(preEntryResponse.getPreEntry());
+  }
+
+  @Test
+  @DatabaseSetup(value = "/club/uctennis/tournament/resolvers/mutations/")
+  @ExpectedDatabase(value = "/club/uctennis/tournament/resolvers/mutations/expected/",
+      table = "pre_entries", assertionMode = DatabaseAssertionMode.NON_STRICT)
+  public void testPreEntryTournamentSave() throws MessagingException {
+    PreEntryResponse preEntryResponse =
+        mutation.preEntryTournament("1", "team2", "representive2", "email2", "phone2");
+    assertEquals("1", preEntryResponse.getPreEntry().getTournamentId());
+    assertEquals("team2", preEntryResponse.getPreEntry().getTeamName());
+    assertEquals("representive2", preEntryResponse.getPreEntry().getRepresentiveName());
+    assertEquals("email2", preEntryResponse.getPreEntry().getEmail());
+    assertEquals("phone2", preEntryResponse.getPreEntry().getPhone());
+    assertNull(preEntryResponse.getErrors());
   }
 }

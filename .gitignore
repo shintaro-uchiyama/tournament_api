@@ -4,3 +4,4 @@ docker/tomcat01/deployment/tournament/
 docker/tomcat01/deployment/tournament.war
 /.recommenders/
 tournament/bin
+tournament/logs/

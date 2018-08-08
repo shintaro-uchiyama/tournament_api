@@ -5,7 +5,7 @@ spring:
         password: root
         driver-class-name: com.mysql.jdbc.Driver
     mail:
-        host: mailcatcher01
+        host: localhost
         port: 1025
     velocity:
         enabled: false
