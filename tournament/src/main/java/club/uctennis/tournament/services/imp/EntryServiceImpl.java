@@ -125,8 +125,8 @@ public class EntryServiceImpl implements EntryService {
         createOnetimeToken(preEntries.getId(), token, LocalDateTime.now().plusDays(1)));
     //// 仮登録完了メール送信
     UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-    URI location =
-        builder.scheme(schema).host(host).port(port).path("/regist/" + token).build().toUri();
+    URI location = builder.scheme(schema).host(host).port(port).path("/regist")
+        .queryParam("token", token).build().toUri();
     SimpleMailMessage mailMessage = createMailMessage(representiveName, location.toString());
     mailSender.send(mailMessage);
     preEntryDto = modelMapper.map(preEntries, PreEntryDto.class);
