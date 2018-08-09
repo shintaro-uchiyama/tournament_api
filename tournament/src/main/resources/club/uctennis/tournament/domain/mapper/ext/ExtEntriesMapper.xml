@@ -13,8 +13,23 @@
         <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
         <result column="edit_date" jdbcType="TIMESTAMP" property="editDate" />
     </resultMap>
-
     <select id="selectByEmail" resultMap="BaseResultMap">
         SELECT * FROM entries WHERE email = #{email,jdbcType=VARCHAR}
+    </select>
+
+        <resultMap id="EntryCountResultMap" type="club.uctennis.tournament.domain.model.ext.EntryNum">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="tournament_id" jdbcType="INTEGER" property="tournamentId" />
+        <result column="entry_count" jdbcType="TIMESTAMP" property="entryCount" />
+    </resultMap>
+    <select id="countByTournamenId" resultMap="EntryCountResultMap">
+        select
+          id, tournament_id, count(*) as entry_count
+        from
+          entries
+        group by
+          tournament_id
+        order by
+          tournament_id;
     </select>
 </mapper>

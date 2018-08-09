@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * GraphQLのQueryに紐付いたオブジェクト
- * 
+ *
  * @author uchiyama-shintaro
  *
  */
@@ -16,4 +16,5 @@ public class Tournament {
   private String date;
   private String image;
   private String description;
+  private String participantNum;
 }

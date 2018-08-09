@@ -10,4 +10,5 @@ type Tournament {
   date: String!
   image: String!
   description: String!
+  participantNum: String!
 }
