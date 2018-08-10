@@ -42,11 +42,10 @@ public class TournamentServiceImpl implements TournamentService {
     List<Tournament> tournamentResponse = new ArrayList<>();;
     for (Tournaments tournaments : tournamentData) {
       Tournament tournament = modelMapper.map(tournaments, Tournament.class);
+      tournament.setParticipantNum(String.valueOf(0));
       for (EntryNum entryNum : entryNums) {
         if (tournaments.getId() == entryNum.getTournamentId()) {
           tournament.setParticipantNum(String.valueOf(entryNum.getEntryCount()));
-        } else {
-          tournament.setParticipantNum(String.valueOf(0));
         }
       }
       tournamentResponse.add(tournament);
