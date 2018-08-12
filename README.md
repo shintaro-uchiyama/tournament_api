@@ -93,3 +93,4 @@ mutation PreEntryTournament($tournamentId: String!, $teamName: String!, $represe
 ```
 http://tournament.local:1080/
 ```
+
