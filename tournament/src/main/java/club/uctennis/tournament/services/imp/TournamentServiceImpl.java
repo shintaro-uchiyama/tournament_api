@@ -44,7 +44,7 @@ public class TournamentServiceImpl implements TournamentService {
       Tournament tournament = modelMapper.map(tournaments, Tournament.class);
       tournament.setParticipantNum(String.valueOf(0));
       for (EntryNum entryNum : entryNums) {
-        if (tournaments.getId() == entryNum.getTournamentId()) {
+        if (tournaments.getId().equals(entryNum.getTournamentId())) {
           tournament.setParticipantNum(String.valueOf(entryNum.getEntryCount()));
         }
       }

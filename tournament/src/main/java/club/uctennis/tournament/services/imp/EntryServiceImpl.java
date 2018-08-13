@@ -187,7 +187,7 @@ public class EntryServiceImpl implements EntryService {
     model.put("validationUrl", validationUrl);
 
     MailSendForm mailSendForm = new MailSendForm();
-    mailSendForm.setFrom("test-from@mexample.com");
+    mailSendForm.setFrom("tennis-info@ucwork.xyz");
     mailSendForm.setTo("test-to@mexample.com");
     mailSendForm.setSubject("大会仮登録完了");
     return MailBuilderUtils.build().setMailSendForm(mailSendForm)
@@ -236,7 +236,7 @@ public class EntryServiceImpl implements EntryService {
     model.put("teamName", preEntries.getTeamName());
 
     MailSendForm mailSendForm = new MailSendForm();
-    mailSendForm.setFrom("test-from@mexample.com");
+    mailSendForm.setFrom("tennis-info@ucwork.xyz");
     mailSendForm.setTo(preEntries.getEmail());
     mailSendForm.setSubject("大会本登録完了");
     return MailBuilderUtils.build().setMailSendForm(mailSendForm)

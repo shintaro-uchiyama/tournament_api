@@ -1,0 +1,29 @@
+spring:
+    datasource:
+        url: jdbc:mysql://rds-ucwork.ckatqfkgvt4x.ap-northeast-1.rds.amazonaws.com:3306/ucwork_unit_test
+        username: rds_ucwork_user
+        password: p4|TR~*8
+        driver-class-name: com.mysql.jdbc.Driver
+    mail:
+        host: localhost
+        port: 1025
+    velocity:
+        enabled: false
+        charset: UTF-8
+        cache: false
+graphql:
+    servlet:
+        mapping: /graphql
+        enabled: true
+        corsEnabled: true
+graphiql:
+    mapping: /graphiql
+    endpoint: /graphql
+    enabled: true
+    pageTitle: GraphiQL
+app:
+    schema: http
+    host: localhost
+    port: 3000
+logging:
+    file: logs/application-tennis.log
