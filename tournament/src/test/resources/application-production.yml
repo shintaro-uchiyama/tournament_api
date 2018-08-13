@@ -27,3 +27,9 @@ app:
     port: 3000
 logging:
     file: logs/application-tennis.log
+cloud.aws:
+  credentials:
+    accessKey: ${AWS_ACCESS_KEY_ID}
+    secretKey: ${AWS_SECRET_ACCESS_KEY}
+  region:
+    static: us-east-1
