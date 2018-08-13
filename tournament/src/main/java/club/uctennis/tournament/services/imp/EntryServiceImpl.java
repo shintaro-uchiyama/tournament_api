@@ -188,7 +188,7 @@ public class EntryServiceImpl implements EntryService {
 
     MailSendForm mailSendForm = new MailSendForm();
     mailSendForm.setFrom("tennis-info@ucwork.xyz");
-    mailSendForm.setTo("test-to@mexample.com");
+    mailSendForm.setTo("shintaro.0112@gmail.com");
     mailSendForm.setSubject("大会仮登録完了");
     return MailBuilderUtils.build().setMailSendForm(mailSendForm)
         .setTemplateLocation("/templates/ValidationMail.vm").setTemplateVariables(model).create();

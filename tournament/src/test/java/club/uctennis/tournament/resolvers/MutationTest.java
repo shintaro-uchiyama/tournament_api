@@ -57,12 +57,12 @@ public class MutationTest {
   @ExpectedDatabase(value = "/club/uctennis/tournament/resolvers/mutations/expected/",
       table = "pre_entries", assertionMode = DatabaseAssertionMode.NON_STRICT)
   public void testPreEntryTournamentSave() throws MessagingException {
-    PreEntryResponse preEntryResponse =
-        mutation.preEntryTournament("1", "team2", "representive2", "email2", "phone2");
+    PreEntryResponse preEntryResponse = mutation.preEntryTournament("1", "team2", "representive2",
+        "shintaro.0112@gmail.com", "phone2");
     assertEquals("1", preEntryResponse.getPreEntry().getTournamentId());
     assertEquals("team2", preEntryResponse.getPreEntry().getTeamName());
     assertEquals("representive2", preEntryResponse.getPreEntry().getRepresentiveName());
-    assertEquals("email2", preEntryResponse.getPreEntry().getEmail());
+    assertEquals("shintaro.0112@gmail.com", preEntryResponse.getPreEntry().getEmail());
     assertEquals("phone2", preEntryResponse.getPreEntry().getPhone());
     assertNull(preEntryResponse.getErrors());
   }

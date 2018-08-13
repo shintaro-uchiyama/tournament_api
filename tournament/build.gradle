@@ -73,6 +73,7 @@ dependencies {
   compile('org.springframework.boot:spring-boot-starter-mail')
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '1.2.2.RELEASE'
   compile group: 'com.amazonaws', name: 'aws-java-sdk-ses', version: '1.11.289'
+  compile group: 'javax.mail', name: 'mail', version: '1.4.1'
 
   // For Hash
   compile('org.springframework.security:spring-security-crypto')
