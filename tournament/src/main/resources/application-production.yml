@@ -29,7 +29,7 @@ logging:
     file: logs/application-tennis.log
 cloud.aws:
   credentials:
-    accessKey: ${AWS_ACCESS_KEY_ID}
-    secretKey: ${AWS_SECRET_ACCESS_KEY}
+    accessKey: ${aws.access.key.id}
+    secretKey: ${aws.secret.access.key}
   region:
     static: us-east-1
