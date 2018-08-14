@@ -28,5 +28,8 @@ app:
 logging:
     file: logs/application-tennis.log
 cloud.aws:
+  credentials:
+    accessKey: ${AWSACCESS}
+    secretKey: ${AWSSECRET}
   region:
     static: us-east-1
