@@ -30,3 +30,5 @@ logging:
 cloud.aws:
   region:
     static: us-east-1
+  stack:
+    auto: false
