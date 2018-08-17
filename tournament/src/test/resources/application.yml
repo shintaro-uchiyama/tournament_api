@@ -28,7 +28,7 @@ app:
 logging:
     file: logs/application-tennis.log
 cloud.aws:
-  stack:
-    auto: false
   region:
     static: us-east-1
+  stack:
+    auto: false
