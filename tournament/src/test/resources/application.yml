@@ -27,3 +27,8 @@ app:
     port: 3000
 logging:
     file: logs/application-tennis.log
+cloud.aws:
+  region:
+    static: us-east-1
+  stack:
+    auto: false

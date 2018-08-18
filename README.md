@@ -94,4 +94,10 @@ mutation PreEntryTournament($tournamentId: String!, $teamName: String!, $represe
 http://tournament.local:1080/
 ```
 
+## 単体テスト
+以下コマンドでテストやfindbugs実行
+
+```
+./gradlew cleanTest test jacocoTestReport check
+```
 

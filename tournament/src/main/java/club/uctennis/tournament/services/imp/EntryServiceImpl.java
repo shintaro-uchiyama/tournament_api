@@ -124,11 +124,7 @@ public class EntryServiceImpl implements EntryService {
     onetimeTokensMapper.insertSelective(
         createOnetimeToken(preEntries.getId(), token, LocalDateTime.now().plusDays(1)));
     //// 仮登録完了メール送信
-    UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-    URI location = builder.scheme(schema).host(host).port(port).path("/regist")
-        .queryParam("token", token).build().toUri();
-    SimpleMailMessage mailMessage = createMailMessage(representiveName, location.toString());
-    mailSender.send(mailMessage);
+    sendPreEntryMail(token, representiveName);
     preEntryDto = modelMapper.map(preEntries, PreEntryDto.class);
     preEntryDto.setPreEntryResult(PreEntryResult.SAVE);
 
@@ -172,6 +168,20 @@ public class EntryServiceImpl implements EntryService {
     onetimeToken.setToken(token);
     onetimeToken.setLimitedDate(limitedDate);
     return onetimeToken;
+  }
+
+  /**
+   * 仮登録完了メール送信.
+   * 
+   * @param token
+   * @param representiveName
+   */
+  private void sendPreEntryMail(String token, String representiveName) {
+    UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+    URI location = builder.scheme(schema).host(host).port(port).path("/regist")
+        .queryParam("token", token).build().toUri();
+    SimpleMailMessage mailMessage = createMailMessage(representiveName, location.toString());
+    mailSender.send(mailMessage);
   }
 
   /**
