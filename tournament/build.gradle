@@ -27,6 +27,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
 apply plugin: 'jacoco'
 apply plugin: 'findbugs'
+apply plugin: 'pmd'
 
 group = 'club.uctennis'
 version = '0.0.1-SNAPSHOT'
