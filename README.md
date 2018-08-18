@@ -101,4 +101,3 @@ http://tournament.local:1080/
 ./gradlew cleanTest test jacocoTestReport check
 ```
 
-
