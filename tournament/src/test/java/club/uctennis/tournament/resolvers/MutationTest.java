@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.modelmapper.ModelMapper;
-import org.mybatis.spring.boot.test.autoconfigure.AutoConfigureMybatis;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -51,7 +50,6 @@ import club.uctennis.tournament.types.PreEntryResponse;
 @DbUnitConfiguration(dataSetLoader = CsvDataSetLoader.class)
 @Transactional
 @PowerMockIgnore({"javax.management.*", "javax.net.ssl.*"})
-@AutoConfigureMybatis
 public class MutationTest {
   @InjectMocks
   private Mutation mutation;
