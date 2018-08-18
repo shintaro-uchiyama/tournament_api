@@ -25,6 +25,7 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
+apply plugin: 'jacoco'
 
 group = 'club.uctennis'
 version = '0.0.1-SNAPSHOT'
