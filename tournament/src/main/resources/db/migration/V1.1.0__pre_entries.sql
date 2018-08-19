@@ -14,8 +14,8 @@ CREATE TABLE pre_entries
 ) COMMENT = '大会参加者を記録するテーブル';
 
 ALTER TABLE pre_entries
-	ADD FOREIGN KEY (tournament_id)
-	REFERENCES tournaments (id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
+    ADD FOREIGN KEY (tournament_id)
+    REFERENCES tournaments (id)
+    ON UPDATE RESTRICT
+    ON DELETE RESTRICT
 ;

@@ -16,8 +16,8 @@ CREATE TABLE entries
 ) COMMENT = '大会参加者を記録するテーブル';
 
 ALTER TABLE entries
-	ADD FOREIGN KEY (tournament_id)
-	REFERENCES tournaments (id)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
+    ADD FOREIGN KEY (tournament_id)
+    REFERENCES tournaments (id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 ;

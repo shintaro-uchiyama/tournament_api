@@ -20,10 +20,10 @@ gradle -Dskip.tests build war && cp build/libs/tournament-0.0.1-SNAPSHOT.war ../
 http://tournament.local/
 ```
 ## flywayによるDB Migration
-以下コマンド実行で./docker/flyway01/sql配下のsqlが反映される
+以下コマンド実行でsrc/main/resources/db/migration配下のsqlが反映される
 ```
-docker-compose up -d dbmigrate01
-docker logs flyway01
+cd tournament
+./gradlew flywayClean flywayMigrate -Dflyway.url=jdbc:mysql://localhost:3306/tournament -Dflyway.user=root -Dflyway.password=root
 ```
 ## MybatisGeneratorによるMapperXml,MapperClass,DomainClass生成
 EclipseのMarketPlaceでversion1.3.7以上のMyBatis Generatorをインストール  

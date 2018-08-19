@@ -24,17 +24,6 @@ services:
       - "8000:8000"
     volumes:
       - ./docker/tomcat01/deployment:/usr/local/tomcat/webapps/:rw
-  dbmigrate01:
-    container_name: flyway01
-    build: ./docker/flyway01
-    image: flyway01:1.0.0
-    command: migrate
-    volumes:
-      - ./docker/flyway01/conf:/flyway/conf
-      - ./docker/flyway01/sql:/flyway/sql
-      - ./docker/flyway01/drivers:/flyway/drivers
-    depends_on:
-      - db01
   db01:
     container_name: mysql01
     build: ./docker/mysql01
