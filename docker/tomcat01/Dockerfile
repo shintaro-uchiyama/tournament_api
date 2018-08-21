@@ -9,7 +9,7 @@ ENV TZ Asia/Tokyo
 # RUN rm -rf /usr/local/tomcat/webapps/ROOT \
 #     /usr/local/tomcat/webapps/docs \
 #     /usr/local/tomcat/webapps/examples
-ADD ./conf/tomcat-users.xml ./conf/server.xml ./conf/web.xml /usr/local/tomcat/conf/
+#ADD ./conf/tomcat-users.xml ./conf/server.xml ./conf/web.xml /usr/local/tomcat/conf/
 
 # access to velocity frmo jboss
 ENV JAVA_OPTS="-Dspring.profiles.active=local"
